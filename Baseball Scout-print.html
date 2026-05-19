@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"/>
+<title>ScoutBook · Print</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+  html, body { margin: 0; padding: 0; background: #f1ede2; }
+  body { font-family: 'Noto Sans TC', system-ui, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .page {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    background: #fbf7ee;
+    overflow: hidden;
+    margin: 24px auto;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    break-inside: avoid;
+    break-after: page;
+  }
+  .page:last-child { break-after: auto; }
+  .page-stage {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .page-stage-inner {
+    transform-origin: center center;
+  }
+  .page-label {
+    position: absolute; left: 36px; bottom: 28px;
+    display: flex; flex-direction: column; gap: 4px;
+    color: #1B2230;
+  }
+  .page-label .seg { font-family: 'Oswald', 'Noto Sans TC', sans-serif; font-size: 12px; letter-spacing: 0.18em; color: #B97744; font-weight: 600; }
+  .page-label .ttl { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+  .page-label .sub { font-size: 13px; color: rgba(27,34,48,0.6); }
+  .page-no  {
+    position: absolute; right: 36px; bottom: 28px;
+    font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 0.16em;
+    color: rgba(27,34,48,0.5);
+  }
+
+  /* Section divider page */
+  .section-page {
+    position: relative;
+    width: 1920px; height: 1080px;
+    background: #1B2230;
+    color: #F4ECDA;
+    overflow: hidden;
+    margin: 24px auto;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 120px;
+    break-inside: avoid; break-after: page;
+  }
+  .section-page .kicker { font-family: 'Oswald', sans-serif; font-size: 16px; letter-spacing: 0.32em; color: #D69869; }
+  .section-page h1 { font-family: 'Oswald', 'Noto Sans TC', sans-serif; font-size: 120px; line-height: 1.02; margin: 14px 0 24px; font-weight: 700; letter-spacing: 0.02em; }
+  .section-page .desc { font-size: 22px; color: rgba(244,236,218,0.7); max-width: 1000px; line-height: 1.6; }
+  .section-page .stitch { margin-top: 40px; width: 240px; height: 1px;
+    background-image: repeating-linear-gradient(90deg, #D69869 0 8px, transparent 8px 14px); }
+
+  @page { size: 1920px 1080px; margin: 0; }
+  @media print {
+    body { background: #fff; }
+    .page, .section-page { margin: 0; box-shadow: none; }
+  }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="browser-window.jsx"></script>
+
+<script type="text/babel" src="sb-atoms.jsx"></script>
+<script type="text/babel" src="sb-app-1.jsx"></script>
+<script type="text/babel" src="sb-app-2.jsx"></script>
+<script type="text/babel" src="sb-record.jsx"></script>
+<script type="text/babel" src="sb-app-3.jsx"></script>
+<script type="text/babel" src="sb-app-4.jsx"></script>
+<script type="text/babel" src="sb-web-1.jsx"></script>
+<script type="text/babel" src="sb-web-2.jsx"></script>
+<script type="text/babel" src="sb-web-3.jsx"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const PHONE_W = 393, PHONE_H = 852;
+const WEB_W = 1280, WEB_H = 800;
+const PAGE_W = 1920, PAGE_H = 1080;
+const STAGE_W = PAGE_W - 240, STAGE_H = PAGE_H - 200;
+
+function Phone({ children, dark = false }) {
+  return (
+    <div style={{ filter: 'drop-shadow(0 30px 60px rgba(27,34,48,0.18))' }}>
+      <IOSDevice width={PHONE_W} height={PHONE_H} dark={dark}>
+        <div style={{ position: 'relative', width: PHONE_W, height: PHONE_H }}>{children}</div>
+      </IOSDevice>
+    </div>
+  );
+}
+function Web({ children, url = 'scoutbook.app' }) {
+  return (
+    <ChromeWindow width={WEB_W} height={WEB_H} url={url}
+      tabs={[{ title: 'ScoutBook · ' + url.replace('scoutbook.app', '') }]}>
+      <div style={{ width: WEB_W, height: WEB_H - 84, position: 'relative' }}>{children}</div>
+    </ChromeWindow>
+  );
+}
+
+function PrintPage({ width, height, kicker, title, subtitle, idx, total, children }) {
+  const scale = Math.min(STAGE_W / width, STAGE_H / height, 1.6);
+  return (
+    <div className="page">
+      <div className="page-stage">
+        <div className="page-stage-inner" style={{ width: width * scale, height: height * scale }}>
+          <div style={{ width, height, transform: `scale(${scale})`, transformOrigin: 'top left' }}>
+            {children}
+          </div>
+        </div>
+      </div>
+      <div className="page-label">
+        <div className="seg">{kicker}</div>
+        <div className="ttl">{title}</div>
+        {subtitle && <div className="sub">{subtitle}</div>}
+      </div>
+      <div className="page-no">{String(idx).padStart(2, '0')} / {String(total).padStart(2, '0')}</div>
+    </div>
+  );
+}
+
+function SectionDivider({ kicker, title, desc }) {
+  return (
+    <div className="section-page">
+      <div className="kicker">{kicker}</div>
+      <h1>{title}</h1>
+      <div className="desc">{desc}</div>
+      <div className="stitch"/>
+    </div>
+  );
+}
+
+// ── Brand cover (re-used from main canvas) ──────────────
+function BrandCover() {
+  return (
+    <div className="sb-root" style={{ width: 920, height: 520, background: 'var(--paper)', padding: 36, position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', top: -40, right: -40, opacity: 0.06 }}>
+        <svg width="320" height="320" viewBox="0 0 320 320">
+          <circle cx="160" cy="160" r="140" fill="none" stroke="var(--ink)" strokeWidth="12"/>
+          <path d="M40 100 Q160 200 280 100 M40 220 Q160 120 280 220" stroke="var(--ball)" strokeWidth="8" fill="none"/>
+        </svg>
+      </div>
+      <div className="sb-display" style={{ fontSize: 11, color: 'var(--clay-deep)', letterSpacing: '0.24em' }}>2026 · PRODUCT DESIGN SPEC</div>
+      <div className="sb-display" style={{ fontSize: 68, fontWeight: 700, color: 'var(--ink)', letterSpacing: '0.06em', lineHeight: 1.05, marginTop: 8 }}>
+        SCOUTBOOK
+      </div>
+      <div style={{ fontSize: 22, color: 'var(--ink-2)', marginTop: 4 }}>球探筆記 · 場邊紀錄 + 球員資料庫 + AI 報告 + 內容市集</div>
+
+      <div className="sb-stitch" style={{ marginTop: 28, marginBottom: 20 }}></div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 3fr 2fr', gap: 28 }}>
+        <div>
+          <div className="sb-display" style={{ fontSize: 10, color: 'rgba(27,34,48,0.5)', letterSpacing: '0.16em' }}>FONTS</div>
+          <div className="sb-display" style={{ fontSize: 34, fontWeight: 700, marginTop: 6 }}>Oswald · 數字</div>
+          <div className="sb-num" style={{ fontSize: 44, color: 'var(--clay-deep)' }}>.356 · 1.072</div>
+          <div style={{ fontSize: 14, marginTop: 10 }}>Noto Sans TC · 中文內文</div>
+          <div className="sb-mono" style={{ fontSize: 11, marginTop: 4, color: 'rgba(27,34,48,0.6)' }}>JetBrains Mono · code</div>
+        </div>
+        <div>
+          <div className="sb-display" style={{ fontSize: 10, color: 'rgba(27,34,48,0.5)', letterSpacing: '0.16em' }}>COLOR · 球場紋理</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 8, marginTop: 8 }}>
+            {[
+              { name: 'paper', c: 'var(--paper)' }, { name: 'chalk', c: 'var(--chalk)' },
+              { name: 'clay', c: 'var(--clay)' }, { name: 'clay-deep', c: 'var(--clay-deep)' },
+              { name: 'grass', c: 'var(--grass)' }, { name: 'ink', c: 'var(--ink)' },
+            ].map((s) => (
+              <div key={s.name}>
+                <div style={{ aspectRatio: '1', borderRadius: 8, background: s.c, border: '1px solid rgba(27,34,48,0.06)' }}/>
+                <div className="sb-display" style={{ fontSize: 9, marginTop: 4, color: 'var(--ink-3)' }}>{s.name}</div>
+              </div>
+            ))}
+          </div>
+          <div className="sb-display" style={{ fontSize: 10, color: 'rgba(27,34,48,0.5)', letterSpacing: '0.16em', marginTop: 14 }}>PITCH 球種色票</div>
+          <div style={{ display: 'flex', gap: 6, marginTop: 6, flexWrap: 'wrap' }}>
+            {['FB', 'SI', 'SL', 'CB', 'CH', 'SF', 'XX'].map((p) => (
+              <div key={p} style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 999, background: 'var(--chalk)', border: '1px solid rgba(27,34,48,0.08)', fontSize: 11 }}>
+                <PitchSwatch code={p}/>
+                <b className="sb-display">{p}</b> {PITCH_NAMES[p]}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <div className="sb-display" style={{ fontSize: 10, color: 'rgba(27,34,48,0.5)', letterSpacing: '0.16em' }}>SIGNATURE</div>
+          <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div className="sb-stitch"></div>
+            <div style={{ fontSize: 12 }}>球縫線 stitch 分隔</div>
+            <div style={{ aspectRatio: '1.6', borderRadius: 10, background: 'linear-gradient(135deg, var(--grass) 30%, var(--clay) 100%)', position: 'relative', overflow: 'hidden' }}>
+              <FieldMap width={200} height={120} hits={[
+                { x: 80, y: 60, type: 'hr' }, { x: 130, y: 80, type: 'single' }, { x: 60, y: 80, type: 'double' },
+              ]}/>
+            </div>
+            <div style={{ fontSize: 12 }}>球場俯視 + 落點 散點圖</div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ position: 'absolute', bottom: 28, right: 36, textAlign: 'right' }}>
+        <div className="sb-display" style={{ fontSize: 10, color: 'var(--clay-deep)', letterSpacing: '0.2em' }}>2 PLATFORMS · 12 APP + 10 WEB SCREENS</div>
+        <div style={{ fontSize: 13, color: 'rgba(27,34,48,0.65)', marginTop: 2 }}>iOS / Android App (主要輸入) · Web (瀏覽 / 分析 / 市集)</div>
+      </div>
+    </div>
+  );
+}
+
+// ── Slide list ──────────────────────────────────────────
+const SLIDES = [
+  { kind: 'cover', kicker: 'COVER', title: '設計系統 · Visual DNA', subtitle: 'SCOUTBOOK · 球場紋理 + 土壤色',
+    width: 920, height: 520, render: () => <BrandCover/> },
+
+  { kind: 'section', kicker: 'PART 01', title: 'App · 核心流程', desc: '登入 → Dashboard → 設定 Wizard → 比賽中記錄 → 比賽結算' },
+
+  { kind: 'phone', kicker: 'APP · 0', title: '登入 Google SSO', dark: true, render: () => <Screen_Login/> },
+  { kind: 'phone', kicker: 'APP · 1', title: '主控台 Dashboard', render: () => <Screen_Dashboard/> },
+  { kind: 'phone', kicker: 'APP · 2', title: '設定 Wizard · 打序', render: () => <Screen_Wizard/> },
+  { kind: 'phone', kicker: 'APP · 3A', title: '記錄 · 保守 (Conservative)', dark: true, render: () => <Screen_RecordA/> },
+  { kind: 'phone', kicker: 'APP · 3A·b', title: '記錄 · 長按格子 → 球種圓盤', dark: true, render: () => <Screen_RecordA_Wheel/> },
+  { kind: 'phone', kicker: 'APP · 3A·c', title: '記錄 · 點擊出 → 擊球類型', dark: true, render: () => <Screen_RecordA_Batted/> },
+  { kind: 'phone', kicker: 'APP · 3A·d', title: '記錄 · 長按落點選結果', dark: true, render: () => <Screen_RecordA_Result/> },
+  { kind: 'phone', kicker: 'APP · 3A·e', title: '記錄 · ⋯ 本場操作選單', dark: true, render: () => <Screen_RecordA_Menu/> },
+  { kind: 'phone', kicker: 'APP · 4', title: '比賽結算 · 打者統計', dark: true, render: () => <Screen_Result/> },
+  { kind: 'phone', kicker: 'APP · 4b', title: '比賽結算 · 投手統計', dark: true, render: () => <Screen_ResultPitcher/> },
+
+  { kind: 'section', kicker: 'PART 02', title: 'App · 球員 + 球探報告', desc: '球員資料庫 → 打者版 6 區塊 / 投手版 6 區塊' },
+  { kind: 'phone', kicker: 'APP · 6', title: '球員資料庫', render: () => <Screen_Players/> },
+  { kind: 'phone', kicker: 'APP · 7', title: '打者版球探報告 · 6 區塊', dark: true, render: () => <Screen_BatterReport/> },
+  { kind: 'phone', kicker: 'APP · 7P', title: '投手版球探報告 · 6 區塊', dark: true, render: () => <Screen_PitcherReport/> },
+
+  { kind: 'section', kicker: 'PART 03', title: 'App · 內容市集', desc: '市集首頁 → 報告詳情 (模糊遮罩) → 賣家收益儀表板' },
+  { kind: 'phone', kicker: 'APP · 8.1', title: '市集首頁', render: () => <Screen_Market/> },
+  { kind: 'phone', kicker: 'APP · 8.2', title: '報告詳情 · 模糊遮罩', dark: true, render: () => <Screen_ListingDetail/> },
+  { kind: 'phone', kicker: 'APP · 8.5', title: '賣家收益儀表板', render: () => <Screen_Earnings/> },
+
+  { kind: 'section', kicker: 'PART 04', title: 'Web · 主控台 + 瀏覽', desc: '桌面端 · 三欄佈局 · 1280×800 設計尺寸' },
+  { kind: 'web', kicker: 'WEB · W1', title: '主控台 / dashboard', url: 'scoutbook.app/dashboard', render: () => <Web_Dashboard/> },
+  { kind: 'web', kicker: 'WEB · W4', title: '球員資料庫 + Drawer', url: 'scoutbook.app/players', render: () => <Web_Players/> },
+
+  { kind: 'section', kicker: 'PART 05', title: 'Web · 球探報告 + 對比', desc: '左 TOC · 中央內容 · 右 PA log · 雙球員對比' },
+  { kind: 'web', kicker: 'WEB · W5', title: '球探報告', url: 'scoutbook.app/players/wang-li-xiang', render: () => <Web_ScoutReport/> },
+  { kind: 'web', kicker: 'WEB · W6', title: '球員對比', url: 'scoutbook.app/players/compare?a=23&b=4', render: () => <Web_Compare/> },
+
+  { kind: 'section', kicker: 'PART 06', title: 'Web · 市集 + 收益 + 訂閱', desc: '瀏覽購買 · 賣家儀表板 · SaaS 方案' },
+  { kind: 'web', kicker: 'WEB · W7', title: '市集首頁', url: 'scoutbook.app/market', render: () => <Web_Market/> },
+  { kind: 'web', kicker: 'WEB · W8', title: '報告詳情 · sticky 購買卡', url: 'scoutbook.app/market/lin-jian-hong-sp', render: () => <Web_ListingDetail/> },
+  { kind: 'web', kicker: 'WEB · W10', title: '賣家收益', url: 'scoutbook.app/earnings', render: () => <Web_Earnings/> },
+  { kind: 'web', kicker: 'WEB · W12', title: '訂閱方案', url: 'scoutbook.app/settings/subscription', render: () => <Web_Subscription/> },
+];
+
+function App() {
+  const total = SLIDES.filter((s) => s.kind !== 'section').length;
+  let idx = 0;
+  return (
+    <>
+      {SLIDES.map((s, i) => {
+        if (s.kind === 'section') {
+          return <SectionDivider key={i} kicker={s.kicker} title={s.title} desc={s.desc}/>;
+        }
+        idx++;
+        if (s.kind === 'cover') {
+          return (
+            <PrintPage key={i} width={s.width} height={s.height} kicker={s.kicker} title={s.title} subtitle={s.subtitle} idx={idx} total={total}>
+              {s.render()}
+            </PrintPage>
+          );
+        }
+        if (s.kind === 'phone') {
+          return (
+            <PrintPage key={i} width={PHONE_W} height={PHONE_H} kicker={s.kicker} title={s.title} idx={idx} total={total}>
+              <Phone dark={s.dark}>{s.render()}</Phone>
+            </PrintPage>
+          );
+        }
+        if (s.kind === 'web') {
+          return (
+            <PrintPage key={i} width={WEB_W} height={WEB_H} kicker={s.kicker} title={s.title} idx={idx} total={total}>
+              <Web url={s.url}>{s.render()}</Web>
+            </PrintPage>
+          );
+        }
+        return null;
+      })}
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+// auto-print after fonts + layout ready
+window.addEventListener('load', () => {
+  Promise.all([
+    document.fonts ? document.fonts.ready : Promise.resolve(),
+    new Promise((r) => setTimeout(r, 1200)),
+  ]).then(() => window.print());
+});
+</script>
+</body>
+</html>
