@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ScoutBook · 棒球球探筆記 · 互動展示</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #0A0D13; }
+    body { font-family: "Noto Sans TC", system-ui, sans-serif; }
+    #root { width: 100vw; height: 100vh; }
+
+    /* Spinner animation used in auth-screens */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    [style*="border-top-color: #4285F4"] { animation: spin 0.85s linear infinite; }
+
+    /* Cursor blink used in MemoSheet / search inputs */
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"
+          integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
+          crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
+          integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
+          crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
+          integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y"
+          crossorigin="anonymous"></script>
+
+  <!-- Design components (load order mirrors dependencies) -->
+  <script type="text/babel" src="ios-frame.jsx"></script>
+  <script type="text/babel" src="ui-atoms.jsx"></script>
+  <script type="text/babel" src="field-map.jsx"></script>
+  <script type="text/babel" src="strike-zone.jsx"></script>
+  <script type="text/babel" src="setup-screens.jsx"></script>
+  <script type="text/babel" src="add-batter.jsx"></script>
+  <script type="text/babel" src="pitch-wheel.jsx"></script>
+  <script type="text/babel" src="batted-ball-sheet.jsx"></script>
+  <script type="text/babel" src="field-location.jsx"></script>
+  <script type="text/babel" src="memo-sheet.jsx"></script>
+  <script type="text/babel" src="game-menu.jsx"></script>
+  <script type="text/babel" src="record-screens.jsx"></script>
+  <script type="text/babel" src="stats-screen.jsx"></script>
+  <script type="text/babel" src="player-heat.jsx"></script>
+  <script type="text/babel" src="auth-screens.jsx"></script>
+  <script type="text/babel" src="dashboard.jsx"></script>
+  <script type="text/babel" src="players-browse.jsx"></script>
+  <script type="text/babel" src="scout-shell.jsx"></script>
+  <script type="text/babel" src="scout-charts.jsx"></script>
+  <script type="text/babel" src="scout-report.jsx"></script>
+
+  <!-- Interactive prototype engine -->
+  <script type="text/babel" src="interactive.jsx"></script>
+  <!-- Showcase wrapper (layout + phone frame) -->
+  <script type="text/babel" src="showcase.jsx"></script>
+</body>
+</html>
