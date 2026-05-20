@@ -1,133 +1,64 @@
-/* SCOUTBOOK · Design Tokens
-   球場紋理：土壤色 + 草綠 + 粉筆線 */
-
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+/* ─────────────────────────────────────────────────────────
+   Baseball Scout — design tokens
+   Aesthetic: ballpark field texture (clay + grass + chalk)
+───────────────────────────────────────────────────────── */
 
 :root {
-  color-scheme: light;
-  /* core palette */
-  --paper: #F4ECDA;
-  --paper-deep: #ECE0C5;
-  --ink: #1B2230;
-  --ink-2: #2A3242;
-  --ink-3: #3A4356;
-  --chalk: #FBF7EE;
-  --chalk-line: rgba(251, 247, 238, 0.4);
+  /* surfaces */
+  --paper:       #F4ECDA;   /* scorebook paper */
+  --paper-2:     #EADFC6;
+  --ink:         #1B2230;   /* dark navy ink */
+  --ink-soft:    #495267;
+  --ink-mute:    #8A8E99;
+  --chalk:       #FBF7EE;
 
   /* field */
-  --clay: #B97744;
-  --clay-deep: #8E5832;
-  --clay-soft: #D69869;
-  --clay-pale: #E8C9A6;
-  --grass: #4D7B3A;
-  --grass-deep: #345224;
-  --grass-soft: #7BA866;
+  --clay:        #B97744;   /* infield dirt */
+  --clay-deep:   #8E5832;
+  --clay-soft:   #D69869;
+  --grass:       #4D7B3A;
+  --grass-deep:  #355E27;
+  --grass-soft:  #7AA15F;
+  --foul-line:   #F4ECDA;
 
-  /* signals */
-  --strike: #2F7D4F;
-  --strike-soft: #7BB58F;
-  --ball: #C24C2F;
-  --ball-soft: #E68A6F;
-  --warn: #C7912A;
-  --warn-soft: #E5B65A;
+  /* accents */
+  --strike:      #2F7D4F;   /* MLB-green for strike */
+  --ball:        #C24C2F;   /* baseball red for ball */
+  --warn:        #C7912A;   /* gold for foul/HBP */
+  --plate:       #ECE4D2;
 
-  /* dark scout-report bg */
-  --night: #0F141C;
-  --night-2: #161D29;
-  --night-3: #1F2937;
-  --night-line: rgba(255, 255, 255, 0.08);
+  /* shadows */
+  --shadow-sm: 0 1px 0 rgba(27,34,48,.04), 0 1px 2px rgba(27,34,48,.06);
+  --shadow-md: 0 4px 14px rgba(27,34,48,.10), 0 1px 3px rgba(27,34,48,.06);
+  --shadow-lg: 0 18px 40px rgba(27,34,48,.16);
 
-  /* pitch types */
-  --pitch-fb: #B97744;
-  --pitch-si: #D69869;
-  --pitch-sl: #5B8CDB;
-  --pitch-cb: #7B5EA7;
-  --pitch-ch: #4D7B3A;
-  --pitch-sf: #C4A35A;
-  --pitch-xx: #888888;
-
-  /* heat scale (cold → hot → on fire) */
-  --heat-0: #2C3E50;
-  --heat-1: #3D6B8C;
-  --heat-2: #C7912A;
-  --heat-3: #C24C2F;
-  --heat-4: #8B1A0F;
-
-  /* fonts */
-  --f-display: 'Oswald', 'Noto Sans TC', system-ui, sans-serif;
-  --f-body: 'Noto Sans TC', system-ui, -apple-system, sans-serif;
-  --f-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
-
-  /* shadow */
-  --shadow-sm: 0 1px 2px rgba(27, 34, 48, 0.06), 0 2px 8px rgba(27, 34, 48, 0.05);
-  --shadow-md: 0 4px 12px rgba(27, 34, 48, 0.08), 0 12px 32px rgba(27, 34, 48, 0.08);
-  --shadow-lg: 0 12px 40px rgba(27, 34, 48, 0.18), 0 40px 80px rgba(27, 34, 48, 0.12);
-
-  /* radii */
-  --r-sm: 6px;
-  --r-md: 10px;
-  --r-lg: 14px;
-  --r-xl: 20px;
+  /* type */
+  --f-display: "Oswald", "Noto Sans TC", system-ui, sans-serif;
+  --f-body:    "Noto Sans TC", "Oswald", system-ui, sans-serif;
+  --f-mono:    "JetBrains Mono", "Oswald", ui-monospace, monospace;
 }
 
-/* base */
-.sb-root {
-  font-family: var(--f-body);
-  font-variant-numeric: tabular-nums;
-  -webkit-font-smoothing: antialiased;
-  color: var(--ink);
-  letter-spacing: 0.01em;
+/* paper grain — used inside artboards behind the device */
+.field-grain {
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(255,255,255,0.4), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.012) 0 1px, transparent 1px 3px),
+    var(--paper);
 }
 
-.sb-mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
-.sb-display { font-family: var(--f-display); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
-.sb-num { font-family: var(--f-display); font-variant-numeric: tabular-nums; font-weight: 600; letter-spacing: 0.02em; }
-
-/* chalk line pattern for backgrounds */
-.sb-chalk-bg {
-  background-color: var(--night);
+/* tiny noise overlay (clay grit) — applied to clay/grass surfaces */
+.grit::before {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
   background-image:
-    linear-gradient(to right, var(--chalk-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--chalk-line) 1px, transparent 1px);
-  background-size: 24px 24px;
+    radial-gradient(rgba(0,0,0,0.5) 0.5px, transparent 0.5px),
+    radial-gradient(rgba(255,255,255,0.3) 0.5px, transparent 0.5px);
+  background-size: 5px 5px, 7px 7px;
+  background-position: 0 0, 2px 3px;
+  mix-blend-mode: overlay;
 }
 
-/* paper texture */
-.sb-paper-bg {
-  background-color: var(--paper);
-  background-image:
-    radial-gradient(circle at 1px 1px, rgba(27, 34, 48, 0.04) 1px, transparent 0);
-  background-size: 14px 14px;
-}
-
-/* baseball stitch divider */
-.sb-stitch {
-  position: relative;
-  height: 1px;
-  background-image: repeating-linear-gradient(90deg,
-    var(--clay-deep) 0 8px, transparent 8px 14px);
-}
-
-/* utility chips */
-.sb-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  font-family: var(--f-display);
-}
-
-/* hot tag pulse */
-@keyframes sb-pulse-hot {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(194, 76, 47, 0.5); }
-  50% { box-shadow: 0 0 0 6px rgba(194, 76, 47, 0); }
-}
-.sb-hot { animation: sb-pulse-hot 1.8s ease-out infinite; }
-
-/* reset some browser-ish defaults inside our screens */
-.sb-root *, .sb-root *::before, .sb-root *::after { box-sizing: border-box; }
-.sb-root button { font-family: inherit; }
+/* common button reset */
+.btn { font-family: var(--f-body); cursor: pointer; }

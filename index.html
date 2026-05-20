@@ -3,64 +3,443 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>ScoutBook · 棒球球探筆記 · 互動展示</title>
+  <title>ScoutBook · Baseball Scout App Mockup</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="styles.css"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #0A0D13; }
-    body { font-family: "Noto Sans TC", system-ui, sans-serif; }
-    #root { width: 100vw; height: 100vh; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; }
+    body {
+      font-family: "Noto Sans TC", system-ui, sans-serif;
+      background: #1a1f2b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-    /* Spinner animation used in auth-screens */
+    /* ── Page chrome ── */
+    .page-header {
+      width: 100%; max-width: 1200px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 24px 12px;
+      color: rgba(244,236,218,0.7);
+      flex-shrink: 0;
+    }
+    .page-logo {
+      font-family: "Oswald", sans-serif;
+      font-size: 18px; font-weight: 700; letter-spacing: 3px;
+      color: #F4ECDA;
+    }
+    .page-tagline {
+      font-size: 11px; letter-spacing: 1.5px;
+      color: rgba(244,236,218,0.4);
+      font-family: "Oswald", sans-serif;
+    }
+
+    /* ── Main layout ── */
+    .main-layout {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 32px;
+      padding: 0 24px 40px;
+      width: 100%; max-width: 1200px;
+    }
+
+    /* ── Phone container ── */
+    .phone-container {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* ── Navigation sidebar ── */
+    .nav-panel {
+      flex: 1;
+      max-width: 280px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 8px;
+    }
+    .nav-section-title {
+      font-family: "Oswald", sans-serif;
+      font-size: 9px; font-weight: 600; letter-spacing: 2px;
+      color: rgba(244,236,218,0.35);
+      padding: 8px 4px 4px;
+      text-transform: uppercase;
+    }
+    .nav-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(244,236,218,0.04);
+      border: 1px solid rgba(244,236,218,0.08);
+      color: rgba(244,236,218,0.6);
+      font-family: "Noto Sans TC", sans-serif;
+      font-size: 13px; font-weight: 500;
+      cursor: pointer;
+      transition: all 0.12s;
+      text-align: left;
+      width: 100%;
+    }
+    .nav-btn:hover {
+      background: rgba(244,236,218,0.08);
+      color: rgba(244,236,218,0.9);
+    }
+    .nav-btn.active {
+      background: rgba(185,119,68,0.2);
+      border-color: rgba(185,119,68,0.4);
+      color: #D69869;
+    }
+    .nav-btn .nav-dot {
+      width: 6px; height: 6px; border-radius: 3px;
+      background: rgba(244,236,218,0.25);
+      flex-shrink: 0;
+    }
+    .nav-btn.active .nav-dot { background: #D69869; }
+
+    /* ── Breadcrumb / screen info ── */
+    .screen-info {
+      display: flex; align-items: center; gap: 8px;
+      font-family: "Oswald", sans-serif;
+      font-size: 10px; letter-spacing: 1.5px;
+      color: rgba(244,236,218,0.35);
+    }
+    .screen-info-sep { opacity: 0.3; }
+
+    /* ── Phone nav controls ── */
+    .phone-nav {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .phone-nav-btn {
+      height: 34px; padding: 0 16px;
+      border-radius: 8px;
+      background: rgba(244,236,218,0.06);
+      border: 1px solid rgba(244,236,218,0.12);
+      color: rgba(244,236,218,0.6);
+      font-family: "Noto Sans TC", sans-serif;
+      font-size: 12px; font-weight: 600;
+      cursor: pointer;
+      transition: all 0.12s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .phone-nav-btn:hover:not(:disabled) {
+      background: rgba(244,236,218,0.12);
+      color: rgba(244,236,218,0.9);
+    }
+    .phone-nav-btn:disabled { opacity: 0.25; cursor: default; }
+    .phone-nav-btn.primary {
+      background: rgba(185,119,68,0.3);
+      border-color: rgba(185,119,68,0.5);
+      color: #D69869;
+    }
+    .phone-nav-btn.primary:hover { background: rgba(185,119,68,0.45); }
+
+    /* ── Spinner animation ── */
     @keyframes spin { to { transform: rotate(360deg); } }
-    [style*="border-top-color: #4285F4"] { animation: spin 0.85s linear infinite; }
+    .spin { animation: spin 0.8s linear infinite; }
 
-    /* Cursor blink used in MemoSheet / search inputs */
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    /* ── Bottom badge ── */
+    .footer-badge {
+      padding: 8px 24px 24px;
+      font-family: "Oswald", sans-serif;
+      font-size: 10px; letter-spacing: 2px;
+      color: rgba(244,236,218,0.2);
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <div id="root"></div>
 
-  <!-- React + Babel -->
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"
-          integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
-          crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
-          integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
-          crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
-          integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y"
-          crossorigin="anonymous"></script>
+<div id="root"></div>
 
-  <!-- Design components (load order mirrors dependencies) -->
-  <script type="text/babel" src="ios-frame.jsx"></script>
-  <script type="text/babel" src="ui-atoms.jsx"></script>
-  <script type="text/babel" src="field-map.jsx"></script>
-  <script type="text/babel" src="strike-zone.jsx"></script>
-  <script type="text/babel" src="setup-screens.jsx"></script>
-  <script type="text/babel" src="add-batter.jsx"></script>
-  <script type="text/babel" src="pitch-wheel.jsx"></script>
-  <script type="text/babel" src="batted-ball-sheet.jsx"></script>
-  <script type="text/babel" src="field-location.jsx"></script>
-  <script type="text/babel" src="memo-sheet.jsx"></script>
-  <script type="text/babel" src="game-menu.jsx"></script>
-  <script type="text/babel" src="record-screens.jsx"></script>
-  <script type="text/babel" src="stats-screen.jsx"></script>
-  <script type="text/babel" src="player-heat.jsx"></script>
-  <script type="text/babel" src="auth-screens.jsx"></script>
-  <script type="text/babel" src="dashboard.jsx"></script>
-  <script type="text/babel" src="players-browse.jsx"></script>
-  <script type="text/babel" src="scout-shell.jsx"></script>
-  <script type="text/babel" src="scout-charts.jsx"></script>
-  <script type="text/babel" src="scout-report.jsx"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
-  <!-- Interactive prototype engine -->
-  <script type="text/babel" src="interactive.jsx"></script>
-  <!-- Showcase wrapper (layout + phone frame) -->
-  <script type="text/babel" src="showcase.jsx"></script>
+<!-- Design system + atoms -->
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="ui-atoms.jsx"></script>
+
+<!-- Screen components -->
+<script type="text/babel" src="field-map.jsx"></script>
+<script type="text/babel" src="strike-zone.jsx"></script>
+<script type="text/babel" src="pitch-wheel.jsx"></script>
+<script type="text/babel" src="batted-ball-sheet.jsx"></script>
+<script type="text/babel" src="field-location.jsx"></script>
+<script type="text/babel" src="memo-sheet.jsx"></script>
+<script type="text/babel" src="game-menu.jsx"></script>
+<script type="text/babel" src="auth-screens.jsx"></script>
+<script type="text/babel" src="dashboard.jsx"></script>
+<script type="text/babel" src="players-browse.jsx"></script>
+<script type="text/babel" src="setup-screens.jsx"></script>
+<script type="text/babel" src="add-batter.jsx"></script>
+<script type="text/babel" src="record-screens.jsx"></script>
+<script type="text/babel" src="stats-screen.jsx"></script>
+<script type="text/babel" src="player-heat.jsx"></script>
+<script type="text/babel" src="scout-shell.jsx"></script>
+<script type="text/babel" src="scout-charts.jsx"></script>
+<script type="text/babel" src="scout-report.jsx"></script>
+
+<!-- Navigation app -->
+<script type="text/babel">
+const { useState, useCallback } = React;
+
+/* ──────────────────────────────────────────
+   Screen registry — every artboard the user
+   can navigate to
+────────────────────────────────────────── */
+const SCREENS = [
+  // ── Auth ──
+  { id: "signin",         group: "登入",       label: "① 登入頁面",          render: () => <SignIn/> },
+  { id: "signin-loading", group: "登入",       label: "② 驗證中 Loading",     render: () => <SignIn loading/> },
+  { id: "signin-chooser", group: "登入",       label: "③ Google 帳號選擇器",  render: () => <SignInChooser/> },
+
+  // ── Dashboard ──
+  { id: "dashboard",      group: "主控台",     label: "主控台 Dashboard",     render: () => <Dashboard/> },
+
+  // ── Player Browse ──
+  { id: "players-all",    group: "球員資料庫", label: "① 全部隊伍",           render: () => <PlayerBrowse mode="default"/> },
+  { id: "players-search", group: "球員資料庫", label: "② 搜尋「陳」",         render: () => <PlayerBrowse mode="search" searchValue="陳"/> },
+  { id: "players-team",   group: "球員資料庫", label: "③ 只看桃園神盾",       render: () => <PlayerBrowse mode="team" focusedTeam="aegis" selectedPlayer={{ team:"aegis", num:"08" }}/> },
+
+  // ── Scout Report ──
+  { id: "scout-ai",       group: "球探報告",   label: "① AI 分析 (預設置頂)", render: () => <ScoutReport scroll="ai"    tab="ai"/> },
+  { id: "scout-zone",     group: "球探報告",   label: "② 九宮格打擊率",       render: () => <ScoutReport scroll="zone"  tab="zone"/> },
+  { id: "scout-pitch",    group: "球探報告",   label: "③ 對球種打擊率",       render: () => <ScoutReport scroll="pitch" tab="pitch"/> },
+  { id: "scout-hand",     group: "球探報告",   label: "④ 對左右投",           render: () => <ScoutReport scroll="hand"  tab="hand"/> },
+  { id: "scout-count",    group: "球探報告",   label: "⑤ 不同球數",           render: () => <ScoutReport scroll="count" tab="count"/> },
+  { id: "scout-spray",    group: "球探報告",   label: "⑥ 擊球落點圖",         render: () => <ScoutReport scroll="spray" tab="spray"/> },
+
+  // ── Setup Wizard ──
+  { id: "setup-1",        group: "設定 Wizard", label: "Step 1 · 隊伍",       render: () => <SetupTeams/> },
+  { id: "setup-2",        group: "設定 Wizard", label: "Step 2 · 打序 (少棒 12 棒)", render: () => <SetupOrder size={12} level="少棒" emptyHint={true}/> },
+  { id: "setup-2a",       group: "設定 Wizard", label: "Step 2 → 新增打者 (空白)", render: () => <AddBatter order={12} jersey="" name="" selectedPos={null} selectedHand={null}/> },
+  { id: "setup-2b",       group: "設定 Wizard", label: "Step 2 → 新增打者 (填寫中)", render: () => <AddBatter order={12} jersey="41" name="許凱傑" selectedPos="LF" selectedHand="S"/> },
+  { id: "setup-3",        group: "設定 Wizard", label: "Step 3 · 投手",       render: () => <SetupPitcher/> },
+  { id: "setup-4",        group: "設定 Wizard", label: "Step 4 · 比賽資訊",   render: () => <SetupMeta/> },
+
+  // ── Record ──
+  { id: "record-a",       group: "比賽記錄",   label: "A · 2-段式 (保守)",    render: () => <RecordA/> },
+  { id: "record-a-wheel", group: "比賽記錄",   label: "A · 長按格子 → 球種圓盤", render: () => <RecordA showPitchWheel wheelCell={5} wheelHover={2}/> },
+  { id: "record-a-batted",group: "比賽記錄",   label: "A · 擊出 → 擊球類型",  render: () => <RecordA showBattedBall battedBallIndex={2}/> },
+  { id: "record-a-loc",   group: "比賽記錄",   label: "A · 選類型 → 球場落點", render: () => <RecordA showFieldLocation/> },
+  { id: "record-a-memo",  group: "比賽記錄",   label: "A · FAB → 加入 Memo", render: () => <RecordA showMemo/> },
+  { id: "record-a-menu",  group: "比賽記錄",   label: "A · ⋯ 操作選單",      render: () => <RecordA showGameMenu gameMenuIndex={0}/> },
+  { id: "record-b",       group: "比賽記錄",   label: "B · 進階 (Advanced)", render: () => <RecordB/> },
+
+  // ── Stats / Heat ──
+  { id: "stats-1",        group: "比賽結算",   label: "① 戰績結算 (我方)",    render: () => <StatsSummary activeTab={0} selectedRow={2}/> },
+  { id: "stats-2",        group: "比賽結算",   label: "② 戰績結算 (對方)",    render: () => <StatsSummary activeTab={1} selectedRow={null}/> },
+  { id: "stats-heat",     group: "比賽結算",   label: "③ 打擊熱區圖",         render: () => <PlayerHeatZone/> },
+];
+
+/* Group screens for sidebar */
+const GROUPS = [...new Set(SCREENS.map(s => s.group))];
+
+/* Dark backgrounds for certain screens */
+const DARK_SCREENS = new Set([
+  "signin","signin-loading","signin-chooser",
+  "scout-ai","scout-zone","scout-pitch","scout-hand","scout-count","scout-spray",
+  "record-a","record-a-wheel","record-a-batted","record-a-loc","record-a-memo","record-a-menu","record-b",
+  "stats-1","stats-2","stats-heat",
+]);
+
+/* ──────────────────────────────────────────
+   BaseballMark — shared tiny logo used by
+   several screens; define once globally so
+   dashboard.jsx and record-screens.jsx can
+   reference it
+────────────────────────────────────────── */
+function BaseballMark({ size = 22 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" fill="var(--chalk)" stroke="var(--ink)" strokeWidth="1"/>
+      <path d="M 4 7 Q 9 12 4 17"  fill="none" stroke="#C24C2F" strokeWidth="0.9"/>
+      <path d="M 20 7 Q 15 12 20 17" fill="none" stroke="#C24C2F" strokeWidth="0.9"/>
+    </svg>
+  );
+}
+window.BaseballMark = BaseballMark;
+
+/* ──────────────────────────────────────────
+   App
+────────────────────────────────────────── */
+function App() {
+  const [idx, setIdx] = useState(0);
+
+  const screen = SCREENS[idx];
+  const isDark = DARK_SCREENS.has(screen.id);
+
+  const go = useCallback((i) => {
+    if (i >= 0 && i < SCREENS.length) setIdx(i);
+  }, []);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minHeight: "100vh", width: "100%" }}>
+      {/* ── Header ── */}
+      <div className="page-header">
+        <div>
+          <div className="page-logo">SCOUTBOOK</div>
+          <div style={{ fontSize: 11, color: "rgba(244,236,218,0.35)", marginTop: 2, letterSpacing: 1 }}>
+            Baseball Scout App · Interactive Mockup
+          </div>
+        </div>
+        <div className="screen-info">
+          <span>{screen.group}</span>
+          <span className="screen-info-sep">·</span>
+          <span style={{ color: "rgba(244,236,218,0.6)" }}>{screen.label}</span>
+          <span className="screen-info-sep">·</span>
+          <span>{idx + 1} / {SCREENS.length}</span>
+        </div>
+      </div>
+
+      {/* ── Main ── */}
+      <div className="main-layout">
+
+        {/* Left sidebar */}
+        <div className="nav-panel">
+          {GROUPS.map(group => (
+            <div key={group}>
+              <div className="nav-section-title">{group}</div>
+              {SCREENS.filter(s => s.group === group).map((s, _) => {
+                const si = SCREENS.indexOf(s);
+                return (
+                  <button
+                    key={s.id}
+                    className={`nav-btn ${si === idx ? "active" : ""}`}
+                    onClick={() => go(si)}
+                  >
+                    <span className="nav-dot"/>
+                    <span>{s.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+
+        {/* Phone */}
+        <div className="phone-container">
+          {/* Device frame */}
+          <div style={{ filter: "drop-shadow(0 40px 80px rgba(0,0,0,0.55))" }}>
+            <IOSDevice width={360} height={780} dark={isDark}>
+              <div style={{
+                width: "100%", height: "100%",
+                background: isDark ? "#0F141C" : "var(--paper)",
+                overflow: "hidden",
+                position: "relative",
+              }}>
+                {screen.render()}
+              </div>
+            </IOSDevice>
+          </div>
+
+          {/* Prev / Next controls */}
+          <div className="phone-nav">
+            <button
+              className="phone-nav-btn"
+              disabled={idx === 0}
+              onClick={() => go(idx - 1)}
+            >
+              ← 上一個
+            </button>
+
+            <div style={{
+              fontFamily: "Oswald, sans-serif",
+              fontSize: 11, letterSpacing: 1.5,
+              color: "rgba(244,236,218,0.3)",
+              minWidth: 60, textAlign: "center",
+            }}>
+              {idx + 1} / {SCREENS.length}
+            </div>
+
+            <button
+              className="phone-nav-btn primary"
+              disabled={idx === SCREENS.length - 1}
+              onClick={() => go(idx + 1)}
+            >
+              下一個 →
+            </button>
+          </div>
+        </div>
+
+        {/* Right panel — flow hint */}
+        <div className="nav-panel">
+          <div className="nav-section-title">App 流程</div>
+
+          {[
+            { label: "登入 (Google SSO)",    screens: ["signin","signin-loading","signin-chooser"] },
+            { label: "主控台",               screens: ["dashboard"] },
+            { label: "球員資料庫",           screens: ["players-all","players-search","players-team"] },
+            { label: "球探報告 (AI 置頂)",   screens: ["scout-ai","scout-zone","scout-pitch","scout-hand","scout-count","scout-spray"] },
+            { label: "設定 Wizard",          screens: ["setup-1","setup-2","setup-2a","setup-2b","setup-3","setup-4"] },
+            { label: "比賽記錄",             screens: ["record-a","record-a-wheel","record-a-batted","record-a-loc","record-a-memo","record-a-menu","record-b"] },
+            { label: "比賽結算 + 熱區",      screens: ["stats-1","stats-2","stats-heat"] },
+          ].map(flow => {
+            const active = flow.screens.includes(screen.id);
+            return (
+              <div key={flow.label} style={{
+                padding: "10px 14px",
+                borderRadius: 10,
+                background: active ? "rgba(185,119,68,0.12)" : "rgba(244,236,218,0.03)",
+                border: `1px solid ${active ? "rgba(185,119,68,0.3)" : "rgba(244,236,218,0.06)"}`,
+                cursor: "pointer",
+                transition: "all 0.12s",
+              }}
+              onClick={() => {
+                const first = flow.screens[0];
+                const fi = SCREENS.findIndex(s => s.id === first);
+                if (fi >= 0) go(fi);
+              }}>
+                <div style={{
+                  fontSize: 13, fontWeight: active ? 700 : 500,
+                  color: active ? "#D69869" : "rgba(244,236,218,0.5)",
+                }}>{flow.label}</div>
+                <div style={{
+                  fontSize: 10, color: "rgba(244,236,218,0.25)",
+                  marginTop: 3, fontFamily: "Oswald, sans-serif",
+                  letterSpacing: 1,
+                }}>{flow.screens.length} 個畫面</div>
+              </div>
+            );
+          })}
+
+          <div style={{ marginTop: 20 }}>
+            <div className="nav-section-title">設計規格</div>
+            <div style={{
+              padding: "12px 14px",
+              borderRadius: 10,
+              background: "rgba(244,236,218,0.03)",
+              border: "1px solid rgba(244,236,218,0.06)",
+              fontSize: 11, color: "rgba(244,236,218,0.4)", lineHeight: 1.6,
+            }}>
+              <div>尺寸：360 × 780 px</div>
+              <div style={{ marginTop: 4 }}>字型：Oswald · Noto Sans TC</div>
+              <div style={{ marginTop: 4 }}>色系：球場紋理風</div>
+              <div style={{ marginTop: 4 }}>框架：iOS 26 裝置外框</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div className="footer-badge">
+        SCOUTBOOK · BASEBALL SCOUT APP · 2026 · DESIGN MOCKUP
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
 </body>
 </html>
